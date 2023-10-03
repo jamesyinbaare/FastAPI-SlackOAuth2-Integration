@@ -5,7 +5,6 @@ from dataclasses import dataclass, field
 from fastapi import FastAPI
 
 
-
 @dataclass
 class Item:
     name: str
@@ -16,7 +15,6 @@ class Item:
 
 
 app = FastAPI()
-
 
 
 @app.get("/items/next", response_model=Item)
