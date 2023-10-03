@@ -1,7 +1,7 @@
 import os
 
 from dotenv import load_dotenv
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Header, HTTPException, status
 from slack_sdk.oauth import OpenIDConnectAuthorizeUrlGenerator, RedirectUriPageRenderer
 from slack_sdk.oauth.state_store import FileOAuthStateStore
 from slack_sdk.web.async_client import AsyncWebClient
@@ -77,3 +77,17 @@ async def oauth_callback(code: str, state: str):
 
     else:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid authorization code")
+
+
+def get_access_token(authorization: str = Header(None)):
+    if authorization is None:
+        raise HTTPException(status_code=401, detail="Authorization header is missing")
+
+    parts = authorization.split()
+
+    if len(parts) != 2 or parts[0].lower() != "bearer":
+        raise HTTPException(status_code=401, detail="Invalid Authorization header format")
+
+    access_token = parts[1]
+
+    return access_token

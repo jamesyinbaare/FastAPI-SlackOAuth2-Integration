@@ -85,6 +85,12 @@ class UserRecord:
 
 
 @dataclass
+class GetUsersPageRes:
+    users: List[UserRecord]
+    page_token: Optional[str] = None
+
+
+@dataclass
 class GetDevicesReq:
     org_id: str
     user: UserRecord
