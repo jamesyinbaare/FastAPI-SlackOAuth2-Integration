@@ -1,0 +1,48 @@
+# Compiled Python files
+__pycache__/
+
+# Byte-compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.venv/
+env/
+*.env
+
+# IDE and text editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Compiled files
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Log files
+*.log
+
+# macOS files
+.DS_Store
+
+# Windows thumbnails
+Thumbs.db
+
+# Compiled Python files
+*.pyc
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/

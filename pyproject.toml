@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "armoz-slack"
+version = "0.1.0"
+description = "A simple Slack OAuth2 integration with FastAPI"
+authors = ["James Yin <jamesyinbaare@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.103.2"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
