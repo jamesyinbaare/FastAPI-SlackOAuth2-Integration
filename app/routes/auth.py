@@ -1,8 +1,8 @@
 import os
 
 from dotenv import load_dotenv
-from fastapi import APIRouter, Header, HTTPException, status
-from slack_sdk.oauth import OpenIDConnectAuthorizeUrlGenerator, RedirectUriPageRenderer
+from fastapi import APIRouter, Depends, Header, HTTPException, status
+from slack_sdk.oauth import AuthorizeUrlGenerator, RedirectUriPageRenderer
 from slack_sdk.oauth.state_store import FileOAuthStateStore
 from slack_sdk.web.async_client import AsyncWebClient
 from starlette.responses import JSONResponse
@@ -14,16 +14,16 @@ load_dotenv()
 client_id = os.getenv("SLACK_CLIENT_ID")
 client_secret = os.getenv("SLACK_CLIENT_SECRET")
 redirect_uri = os.getenv("SLACK_REDIRECT_URI")
-
-scopes = ["openid", "email", "profile"]
+user_scopes = ["users:read", "users:read.email", "usergroups:read", "users.profile:read"]
+scopes = ["usergroups:read"]
 
 state_store = FileOAuthStateStore(expiration_seconds=300)
 
 
-authorization_url_generator = OpenIDConnectAuthorizeUrlGenerator(
+authorization_url_generator = AuthorizeUrlGenerator(
     client_id=client_id,
     scopes=scopes,
-    redirect_uri=redirect_uri,
+    user_scopes=user_scopes,
 )
 redirect_page_renderer = RedirectUriPageRenderer(
     install_path="/slack/oauth",
@@ -57,7 +57,6 @@ async def oauth_callback(code: str, state: str):
                 state = token_response.get("state")
 
                 user_info_response = await AsyncWebClient(token=access_token).openid_connect_userInfo()
-
                 protected_data = {"access_token": access_token, "id_token": id_token, "state": state}
                 consent_usr = user_info_response.get("sub")
 
@@ -91,3 +90,17 @@ def get_access_token(authorization: str = Header(None)):
     access_token = parts[1]
 
     return access_token
+
+
+@auth_router.get("/slack/verify")
+async def verify(access_token: str = Depends(get_access_token)):
+    try:
+        user_info_response = await AsyncWebClient(token=access_token).openid_connect_userInfo()
+        print(user_info_response)
+        ok = user_info_response.get("ok")
+        if ok:
+            return {"ok": True}
+        else:
+            return {"ok": False}
+    except Exception:
+        return {"ok": False}

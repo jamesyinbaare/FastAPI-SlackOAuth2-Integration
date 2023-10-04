@@ -12,4 +12,4 @@ app.include_router(users.user_router, prefix="/users")
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Armoz Slack Integration"}

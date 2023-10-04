@@ -34,15 +34,15 @@ class FileDTO:
 
 @dataclass
 class UserEmail:
-    address: str
+    address: Optional[str] = None
     primary: Optional[bool] = None
 
 
 @dataclass
 class UserName:
-    givenName: str
-    familyName: str
-    fullName: str
+    given_name: str
+    family_name: Optional[str] = None
+    full_name: Optional[str] = None
 
 
 @dataclass
@@ -57,19 +57,18 @@ class UserMailData:
 @dataclass
 class UserRecord:
     org_id: str
-    int_name: str
     user_id: str
-    primary_email: str
     is_admin: bool
     admin_extra_info: Dict
     suspended: bool
     archived: bool
-    org_unit_path: str
-    is_enrolled_in_2_sv: bool
-    is_enforced_in_2_sv: bool
     name: UserName
-    emails: List[UserEmail]
-    mail_data: UserMailData
+    primary_email: Optional[str] = None
+    org_unit_path: Optional[str] = None
+    is_enrolled_in_2_sv: Optional[bool] = None
+    is_enforced_in_2_sv: Optional[bool] = None
+    emails: List[UserEmail] = field(default_factory=list)
+    mail_data: Optional[UserMailData] = None
     password_strength: Optional[str] = None
     password_length_compliance: Optional[str] = None
     record_creation_time: Optional[datetime.datetime] = None
@@ -86,7 +85,7 @@ class UserRecord:
 
 @dataclass
 class GetUsersPageRes:
-    users: List[UserRecord]
+    users: List[UserRecord] = field(default_factory=list)
     page_token: Optional[str] = None
 
 
