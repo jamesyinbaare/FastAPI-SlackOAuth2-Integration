@@ -53,7 +53,6 @@ async def download_file(url, save_path):
         async with session.get(url, headers=headers) as response:
             if response.status == 200:
                 data = await response.content.read()
-                print(data)
                 async with aiofiles.open(save_path, "+wb") as f:
                     await f.write(data)
             else:
