@@ -10,7 +10,7 @@ load_dotenv()
 
 
 SLACK_ACCESS_TOKEN = os.getenv("SLACK_ACCESS_TOKEN")
-
+SLACK_BOT_ACCESS_TOKEN = os.getenv("SLACK_BOT_ACCESS_TOKEN")
 client = AsyncWebClient(token=SLACK_ACCESS_TOKEN)
 
 event_router = APIRouter(tags=["events"])
@@ -43,14 +43,16 @@ async def file_events(event: dict):
         except Exception as e:
             print(f"Could not download files: {e}")
 
+    # slack uses the challenge token to verify the event request url
     return challenge
 
 
 async def download_file(url, save_path):
+    headers = {"Authorization": f"Bearer {SLACK_ACCESS_TOKEN}"}
     async with ClientSession() as session:
-        async with session.get(url) as slack_file:
-            if slack_file.status == 200:
-                data = await slack_file.content.read()
+        async with session.get(url, headers=headers) as response:
+            if response.status == 200:
+                data = await response.content.read()
                 print(data)
                 async with aiofiles.open(save_path, "+wb") as f:
                     await f.write(data)
