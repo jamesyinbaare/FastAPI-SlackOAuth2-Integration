@@ -1,4 +1,4 @@
-# Armoz Slack OAuth2 integration
+# Slack OAuth2 integration
 
 This is simple FastAPI that integrates Slack's OAuth2 for user authentication and authorization
 
